@@ -1,5 +1,6 @@
 ﻿using System;
 using Exiled.API.Features;
+using Player = Exiled.Events.Handlers.Player;
 using Server = Exiled.Events.Handlers.Server;
 
 namespace hats
@@ -20,6 +21,7 @@ namespace hats
             Handler = new EventHandler(Config);
 
             Server.WaitingForPlayers += Handler.WaitingForPlayers;
+            Player.Left += Handler.OnLeave;
             
             base.OnEnabled();
         }
@@ -27,6 +29,7 @@ namespace hats
         public override void OnDisabled()
         {
             Server.WaitingForPlayers -= Handler.WaitingForPlayers;
+            Player.Left -= Handler.OnLeave;
             
             Singleton = null;
             Handler = null;

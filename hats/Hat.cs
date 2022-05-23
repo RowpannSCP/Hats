@@ -11,8 +11,6 @@ namespace hats
 {
     public class Hat
     {
-        public static List<Hat> hats = new List<Hat>();
-        
         public List<SchematicObject> SpawnedHats = new List<SchematicObject>();
         public string Name;
         public Vector3 Offset;

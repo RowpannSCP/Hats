@@ -66,5 +66,19 @@ namespace hats
             obj.gameObject.transform.localPosition = hat.Offset;
             ply.SessionVariables.Add("HatWearer", obj);
         }
+
+        public static void RemoveHat(this Player ply)
+        {
+            if (!ply.SessionVariables.ContainsKey("HatWearer"))
+            {
+                throw new ArgumentException("Player isnt wearing a hat!");
+            }
+            
+            if(ply.SessionVariables["HatWearer"] is SchematicObject obj && obj.gameObject.IsHat(out var hat))
+            {
+                hat.SpawnedHats.Remove(obj);
+                obj.Destroy();
+            }
+        }
     }
 }
