@@ -37,7 +37,7 @@ public class RemoveHat : ICommand
             return false;
         }
         
-        ply.AddHat(API.Hats[arguments.At(0)]);
+        ply.RemoveHat();
         
         response = $"Gave hat to {ply.Nickname}!";
         return true;

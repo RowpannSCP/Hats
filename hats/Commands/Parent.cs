@@ -18,6 +18,7 @@ namespace hats.Commands
         {
             RegisterCommand(new List());
             RegisterCommand(new AddHat());
+            RegisterCommand(new RemoveHat());
         }
 
         protected override bool ExecuteParent(ArraySegment<string> args, ICommandSender sender, out string response)
