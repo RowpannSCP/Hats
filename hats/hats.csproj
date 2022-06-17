@@ -107,6 +107,7 @@
         <Compile Include="Commands\List.cs" />
         <Compile Include="Commands\Parent.cs" />
         <Compile Include="Commands\RemoveHat.cs" />
+        <Compile Include="Components\HatComponent.cs" />
         <Compile Include="Config.cs" />
         <Compile Include="EventHandler.cs" />
         <Compile Include="Hat.cs" />

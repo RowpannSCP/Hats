@@ -1,4 +1,5 @@
 ﻿using Exiled.Events.EventArgs;
+using hats.Components;
 using MapEditorReborn.API.Features.Objects;
 
 namespace hats
@@ -6,7 +7,7 @@ namespace hats
     public class EventHandler
     {
         private Config cfg;
-
+        
         public EventHandler(Config cfg) => this.cfg = cfg;
 
         public void WaitingForPlayers()
@@ -16,7 +17,7 @@ namespace hats
 
         public void OnLeave(LeftEventArgs ev)
         {
-            if(ev.Player.SessionVariables.ContainsKey("HatWearer"))
+            if(ev.Player.GameObject.TryGetComponent<HatComponent>(out _))
                 ev.Player.RemoveHat();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using CommandSystem;
 using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
@@ -43,7 +44,7 @@ public class AddHat : ICommand
             }
         }
 
-        if (ply.SessionVariables.ContainsKey("HatWearer"))
+        if (Plugin.Singleton.hats.Keys.Any(x => x == ply.UserId))
         {
             response = "Player is already wearing a hat!";
             return false;

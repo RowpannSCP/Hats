@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Exiled.API.Features;
+using hats.Components;
+using UnityEngine;
 using Player = Exiled.Events.Handlers.Player;
 using Server = Exiled.Events.Handlers.Server;
 
@@ -14,9 +17,11 @@ namespace hats
 
         public static Plugin Singleton;
         public EventHandler Handler { get; private set; }
-        
+        public Dictionary<string, HatComponent> hats;
+
         public override void OnEnabled()
         {
+            hats = new Dictionary<string, HatComponent>();
             Singleton = this;
             Handler = new EventHandler(Config);
 
@@ -33,6 +38,7 @@ namespace hats
             
             Singleton = null;
             Handler = null;
+            hats = null;
             base.OnDisabled();
         }
     }

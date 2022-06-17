@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
+using hats.Components;
 using MapEditorReborn.API.Features;
 using MapEditorReborn.API.Features.Objects;
 using MapEditorReborn.API.Features.Serializable;
 using Newtonsoft.Json;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace hats
 {
@@ -14,14 +16,10 @@ namespace hats
     {
         public static Dictionary<string, Hat> Hats { get; private set; } = new Dictionary<string, Hat>();
 
-        public static bool IsHat(this GameObject obj, out Hat hat)
+        public static bool IsHat(this GameObject obj, out HatComponent hat)
         {
-            hat = Hats.FirstOrDefault(x => x.Value.SpawnedHats.Any(x => x.gameObject == obj)).Value;
-            if (hat != null)
-            {
-                return true;
-            }
-            return false;
+            hat = Plugin.Singleton.hats.FirstOrDefault(x => x.Value.gameObject.Equals(obj)).Value;
+            return hat is not null;
         }
         
         public static void LoadHats()
@@ -45,10 +43,10 @@ namespace hats
         {
             if(Hats.Count == 0)
                 return;
-            foreach (var ply in Player.List.Where(x => x.SessionVariables.ContainsKey("HatWearer")))
+            foreach (var ply in Player.List)
             {
-                ((SchematicObject)ply.SessionVariables["HatWearer"]).Destroy();
-                ply.SessionVariables.Remove("HatWearer");
+                if(ply.GameObject.TryGetComponent<HatComponent>(out _))
+                    ply.RemoveHat();
             }
             foreach (var kvp in Hats)
             {
@@ -61,23 +59,31 @@ namespace hats
         {
             if (hat == null)
                 throw new ArgumentNullException(nameof(hat));
+            if (ply.GameObject.TryGetComponent<HatComponent>(out _))
+                return;
             var obj = hat.SpawnHat(ply.Position);
-            obj.gameObject.transform.parent = ply.GameObject.transform;
-            obj.gameObject.transform.localPosition = hat.Offset;
-            ply.SessionVariables.Add("HatWearer", obj);
+            var comp = ply.GameObject.AddComponent<HatComponent>();
+            comp.hat = hat;
+            comp.ply = ply;
+            comp.schem = obj;
+            var gameObject = obj.gameObject;
+            gameObject.transform.parent = ply.GameObject.transform;
+            gameObject.transform.localPosition = hat.Offset;
+            Plugin.Singleton.hats.Add(ply.UserId, comp);
         }
 
         public static void RemoveHat(this Player ply)
         {
-            if (!ply.SessionVariables.ContainsKey("HatWearer"))
+            if (Plugin.Singleton.hats.Keys.All(x => x != ply.UserId))
             {
-                throw new ArgumentException("Player isnt wearing a hat!");
+                throw new ArgumentException("Player isn't wearing a hat!");
             }
-            
-            if(ply.SessionVariables["HatWearer"] is SchematicObject obj && obj.gameObject.IsHat(out var hat))
+
+            var schem = Plugin.Singleton.hats[ply.UserId];
+            if(schem.gameObject.IsHat(out var hat))
             {
-                hat.SpawnedHats.Remove(obj);
-                obj.Destroy();
+                hat.DoDestroy();
+                Plugin.Singleton.hats.Remove(ply.UserId);
             }
         }
     }

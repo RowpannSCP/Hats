@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using CommandSystem;
 using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
@@ -31,7 +32,7 @@ public class RemoveHat : ICommand
             }
         }
 
-        if (!ply.SessionVariables.ContainsKey("HatWearer"))
+        if (Plugin.Singleton.hats.Keys.All(x => x != ply.UserId))
         {
             response = "Player isn't wearing a hat!";
             return false;
@@ -39,7 +40,7 @@ public class RemoveHat : ICommand
         
         ply.RemoveHat();
         
-        response = $"Gave hat to {ply.Nickname}!";
+        response = $"Removed hat from {ply.Nickname}!";
         return true;
     }
 }
