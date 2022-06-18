@@ -30,6 +30,11 @@ namespace hats
             List<KeyValuePair<string, HatComponent>> toRemove = new List<KeyValuePair<string, HatComponent>>();
             foreach (var kvp in Plugin.Singleton.hats.Where(x => x.Value.hat == this))
             {
+                if (kvp.Value is null || kvp.Value.gameObject.Equals(null) || !kvp.Value.schem.isActiveAndEnabled)
+                {
+                    toRemove.Add(kvp);
+                    continue;
+                }
                 kvp.Value.DoDestroy();
                 toRemove.Add(kvp);
             }
