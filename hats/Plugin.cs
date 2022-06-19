@@ -26,6 +26,7 @@ namespace hats
             Handler = new EventHandler(Config);
 
             Server.WaitingForPlayers += Handler.WaitingForPlayers;
+            Server.EndingRound += Handler.EndingRound;
             Player.Left += Handler.OnLeave;
             
             base.OnEnabled();
@@ -34,6 +35,7 @@ namespace hats
         public override void OnDisabled()
         {
             Server.WaitingForPlayers -= Handler.WaitingForPlayers;
+            Server.EndingRound -= Handler.EndingRound;
             Player.Left -= Handler.OnLeave;
             
             Singleton = null;
