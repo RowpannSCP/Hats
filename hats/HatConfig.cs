@@ -7,5 +7,6 @@ namespace hats
         public string SchematicName { get; set; }
         public string Name { get; set; }
         public Vector3 offset { get; set; }
+        public Vector3 rotation { get; set; }
     }
 }

@@ -21,6 +21,12 @@ namespace hats
                     x = 0f,
                     y = 0.2f,
                     z = 0f
+                },
+                rotation = new Vector3()
+                {
+                    x = 0,
+                    y = 0,
+                    z = 0
                 }
             }
         };

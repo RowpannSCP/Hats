@@ -35,7 +35,7 @@ namespace hats
             {
                 var data = MapUtils.GetSchematicDataByName(cfg.SchematicName);
                 if(data != null)
-                    Hats.Add(cfg.Name, new Hat(cfg.Name, data, cfg.offset));
+                    Hats.Add(cfg.Name, new Hat(cfg.Name, data, cfg.offset, cfg.rotation));
             }
         }
 
@@ -69,6 +69,7 @@ namespace hats
             var gameObject = obj.gameObject;
             gameObject.transform.parent = ply.GameObject.transform;
             gameObject.transform.localPosition = hat.Offset;
+            gameObject.transform.localRotation = hat.Rotation;
             Plugin.Singleton.hats.Add(ply.UserId, comp);
         }
 
@@ -79,12 +80,20 @@ namespace hats
                 throw new ArgumentException("Player isn't wearing a hat!");
             }
 
-            var schem = Plugin.Singleton.hats[ply.UserId];
-            if(schem.gameObject.IsHat(out var hat))
+            try
             {
-                hat.DoDestroy();
-                Plugin.Singleton.hats.Remove(ply.UserId);
+                var schem = Plugin.Singleton.hats[ply.UserId];
+                if(schem.gameObject.IsHat(out var hat))
+                {
+                    hat.DoDestroy();
+                }
             }
+            catch (Exception e)
+            {
+                // ignored
+            }
+
+            Plugin.Singleton.hats.Remove(ply.UserId);
         }
     }
 }

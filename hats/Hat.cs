@@ -15,11 +15,12 @@ namespace hats
     {
         public string Name;
         public Vector3 Offset;
+        public Quaternion Rotation;
         public SchematicObjectDataList Schematic;
 
         internal SchematicObject SpawnHat(Vector3 Position, Quaternion? Rotation = null, Vector3? scale = null)
         {
-            SchematicObject obj = ObjectSpawner.SpawnSchematic(Name, Position, null, scale, Schematic);
+            SchematicObject obj = ObjectSpawner.SpawnSchematic(Name, Position, Rotation, scale, Schematic);
             return obj;
         }
 
@@ -45,11 +46,13 @@ namespace hats
             }
         }
 
-        public Hat(string Name, SchematicObjectDataList data, Vector3 offset)
+        public Hat(string Name, SchematicObjectDataList data, Vector3 offset, Vector3 rotation)
         {
             this.Name = Name;
             Schematic = data;
             this.Offset = offset;
+            this.Rotation = new Quaternion();
+            this.Rotation.eulerAngles = rotation;
         }
     }
 }

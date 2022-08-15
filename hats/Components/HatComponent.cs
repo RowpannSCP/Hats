@@ -13,10 +13,17 @@ namespace hats.Components
 
         public void DoDestroy()
         {
-            schem.Destroy();
             ply = null;
             hat = null;
-            Destroy(this);
+            schem.Destroy();
+            try
+            {
+                Destroy(this);
+            }
+            catch(Exception e)
+            {
+                // ignore
+            }
         }
     }
 }
