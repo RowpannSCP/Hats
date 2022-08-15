@@ -3,19 +3,20 @@ using Exiled.API.Features;
 using MapEditorReborn.API.Features.Objects;
 using UnityEngine;
 
-namespace hats.Components;
-
-public class HatComponent : MonoBehaviour
+namespace hats.Components
 {
-    public Hat hat;
-    public Player ply;
-    public SchematicObject schem;
-
-    public void DoDestroy()
+    public class HatComponent : MonoBehaviour
     {
-        schem.Destroy();
-        ply = null;
-        hat = null;
-        Destroy(this);
+        public Hat hat;
+        public Player ply;
+        public SchematicObject schem;
+
+        public void DoDestroy()
+        {
+            schem.Destroy();
+            ply = null;
+            hat = null;
+            Destroy(this);
+        }
     }
 }

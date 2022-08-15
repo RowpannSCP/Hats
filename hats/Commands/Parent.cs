@@ -9,7 +9,7 @@ namespace hats.Commands
     [CommandHandler(typeof(ClientCommandHandler))]
     public class Parent : ParentCommand
     {
-        public override string Command { get; } = "hats";
+        public override string Command { get; } = Plugin.Singleton.Config.CommandPrefix;
         public override string[] Aliases { get; } = { };
         public override string Description { get; } = "Parent command for hats plugin";
         public Parent() => LoadGeneratedCommands();
