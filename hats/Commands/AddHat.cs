@@ -44,7 +44,7 @@ namespace hats.Commands
                 }
             }
 
-            if (Plugin.Singleton.hats.Keys.Any(x => x == ply.UserId))
+            if (Plugin.Singleton.hats.ContainsKey(ply.UserId))
             {
                 response = "Player is already wearing a hat!";
                 return false;

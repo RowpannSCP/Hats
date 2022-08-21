@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Exiled.API.Features;
 using hats.Components;
-using UnityEngine;
 using Player = Exiled.Events.Handlers.Player;
 using Server = Exiled.Events.Handlers.Server;
 
@@ -12,7 +11,7 @@ namespace hats
     {
         public override string Author { get; } = "Rowpann SCP";
         public override string Name { get; } = "hats";
-        public override Version Version { get; } = new Version(1, 1, 0);
+        public override Version Version { get; } = new Version(1, 2, 0);
         public override Version RequiredExiledVersion { get; } = new Version(5, 2, 0);
 
         public static Plugin Singleton;
@@ -26,7 +25,6 @@ namespace hats
             Handler = new EventHandler(Config);
 
             Server.WaitingForPlayers += Handler.WaitingForPlayers;
-            Server.EndingRound += Handler.EndingRound;
             Player.Left += Handler.OnLeave;
             
             base.OnEnabled();
@@ -35,7 +33,6 @@ namespace hats
         public override void OnDisabled()
         {
             Server.WaitingForPlayers -= Handler.WaitingForPlayers;
-            Server.EndingRound -= Handler.EndingRound;
             Player.Left -= Handler.OnLeave;
             
             Singleton = null;

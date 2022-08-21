@@ -67,7 +67,7 @@ namespace hats
             comp.ply = ply;
             comp.schem = obj;
             var gameObject = obj.gameObject;
-            gameObject.transform.parent = ply.GameObject.transform;
+            gameObject.transform.SetParent(ply.GameObject.transform);
             gameObject.transform.localPosition = hat.Offset;
             gameObject.transform.localRotation = hat.Rotation;
             Plugin.Singleton.hats.Add(ply.UserId, comp);
