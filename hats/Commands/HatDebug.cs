@@ -43,7 +43,7 @@
             return false;
         }
 
-        public string Command { get; } = "Debug";
+        public string Command { get; } = "debug";
         public string[] Aliases { get; } = { };
         public string Description { get; } = "Print hat debug information";
     }

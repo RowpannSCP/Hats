@@ -19,6 +19,14 @@ namespace hats
             _isLoaded = true;
         }
 
+        public void Died(DiedEventArgs ev)
+        {
+            if(!cfg.RemoveHatOnDeath)
+                return;
+            if(ev.Target.GameObject.TryGetComponent<HatComponent>(out _))
+                ev.Target.RemoveHat();
+        }
+        
         public void OnLeave(LeftEventArgs ev)
         {
             if(ev.Player.GameObject.TryGetComponent<HatComponent>(out _))

@@ -12,6 +12,8 @@ using Object = UnityEngine.Object;
 
 namespace hats
 {
+    using System.Diagnostics;
+
     public static class API
     {
         public static Dictionary<string, Hat> Hats { get; private set; } = new Dictionary<string, Hat>();
@@ -50,7 +52,16 @@ namespace hats
             }
             foreach (var kvp in Hats)
             {
-                kvp.Value.DestroyInstances();
+                try
+                {
+                    kvp.Value.DestroyInstances();
+                }
+                catch (ArgumentException e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+
             }
             Hats.Clear();
         }
