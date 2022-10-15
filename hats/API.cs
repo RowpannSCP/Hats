@@ -88,7 +88,7 @@ namespace hats
             if (!hat.ShowToOwner)
                 Timing.CallDelayed(0.5f, () => ply.DestroySchematic(obj));
             if (hat.HideOwner)
-                ply.EnableEffect(EffectType.Invisible, 99999f);
+                ply.IsInvisible = true;
             Plugin.Singleton.hats.Add(ply.UserId, comp);
         }
 
@@ -105,7 +105,7 @@ namespace hats
                 if(schem.gameObject.IsHat(out var hat))
                 {
                     if (hat.hat.HideOwner)
-                        ply.DisableEffect(EffectType.Invisible);
+                        ply.IsInvisible = false;
                     hat.DoDestroy();
                 }
             }
