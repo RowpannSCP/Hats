@@ -2,11 +2,17 @@
 
 namespace hats
 {
+    using System.Collections.Generic;
+
     public class HatConfig
     {
         public string SchematicName { get; set; }
         public string Name { get; set; }
-        public Vector3 offset { get; set; }
-        public Vector3 rotation { get; set; }
+        public Vector3 Offset { get; set; }
+        public Vector3 Rotation { get; set; }
+        public Vector3 Scale { get; set; }
+        public bool MakePlayerInvisible { get; set; } = false;
+        public List<string> UsersWithAccess { get; set; } = new List<string>();
+        public List<string> GroupsWithAccess { get; set; } = new List<string>();
     }
 }

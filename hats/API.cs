@@ -13,6 +13,9 @@ using Object = UnityEngine.Object;
 namespace hats
 {
     using System.Diagnostics;
+    using Exiled.API.Enums;
+    using MapEditorReborn.API.Extensions;
+    using MEC;
 
     public static class API
     {
@@ -37,7 +40,7 @@ namespace hats
             {
                 var data = MapUtils.GetSchematicDataByName(cfg.SchematicName);
                 if(data != null)
-                    Hats.Add(cfg.Name, new Hat(cfg.Name, data, cfg.offset, cfg.rotation));
+                    Hats.Add(cfg.Name, new Hat(cfg.Name, data, cfg.Offset, cfg.Rotation, cfg.Scale, cfg.MakePlayerInvisible));
             }
         }
 
@@ -81,6 +84,11 @@ namespace hats
             gameObject.transform.SetParent(ply.GameObject.transform);
             gameObject.transform.localPosition = hat.Offset;
             gameObject.transform.localRotation = hat.Rotation;
+            gameObject.transform.localScale = hat.Scale;
+            if (!Plugin.Singleton.Config.ShowHatToOwner)
+                Timing.CallDelayed(0.5f, () => ply.DestroySchematic(obj));
+            if (hat.HideOwner)
+                ply.EnableEffect(EffectType.Invisible, 99999f);
             Plugin.Singleton.hats.Add(ply.UserId, comp);
         }
 
@@ -96,6 +104,8 @@ namespace hats
                 var schem = Plugin.Singleton.hats[ply.UserId];
                 if(schem.gameObject.IsHat(out var hat))
                 {
+                    if (hat.hat.HideOwner)
+                        ply.DisableEffect(EffectType.Invisible);
                     hat.DoDestroy();
                 }
             }

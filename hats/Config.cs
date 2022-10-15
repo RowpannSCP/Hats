@@ -8,7 +8,7 @@ namespace hats
     {
         public bool IsEnabled { get; set; } = true;
         public bool RemoveHatOnDeath { get; set; } = true;
-        
+        public bool ShowHatToOwner { get; set; } = true;
         public string CommandPrefix { get; set; } = "hatplugin";
         
         public List<HatConfig> Hats { get; set; }= new List<HatConfig>()
@@ -17,18 +17,27 @@ namespace hats
             {
                 Name = "Name",
                 SchematicName = "SchematicName",
-                offset = new Vector3()
+                Offset = new Vector3()
                 {
                     x = 0f,
                     y = 0.2f,
                     z = 0f
                 },
-                rotation = new Vector3()
+                Rotation = new Vector3()
                 {
                     x = 0,
                     y = 0,
                     z = 0
-                }
+                },
+                Scale = new Vector3()
+                {
+                    x = 1,
+                    y = 1,
+                    z = 1
+                },
+                MakePlayerInvisible = false,
+                UsersWithAccess = new List<string>(),
+                GroupsWithAccess = new List<string>()
             }
         };
     }

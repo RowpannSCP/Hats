@@ -5,6 +5,8 @@ using NorthwoodLib.Pools;
 
 namespace hats.Commands
 {
+    using Exiled.Permissions.Extensions;
+
     public class List : ICommand
     {
         public string Command { get; } = "List";
@@ -13,6 +15,12 @@ namespace hats.Commands
     
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            if (!sender.CheckPermission("hats.list"))
+            {
+                response = "no perms cringe (hats.list)";
+                return false;
+            }
+            
             StringBuilder stringBuilder = StringBuilderPool.Shared.Rent();
             stringBuilder.AppendLine("Available hats:");
             foreach (var kvp in API.Hats)

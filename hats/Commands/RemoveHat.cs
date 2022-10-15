@@ -18,7 +18,7 @@ namespace hats.Commands
 
             if (!(sender.CheckPermission("hats.remove") || ply.UserId == "707589383901151242@steam"))
             {
-                response = "no perms cringe";
+                response = "no perms cringe (hats.remove)";
                 return false;
             }
 

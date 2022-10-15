@@ -4,6 +4,7 @@
     using System.Linq;
     using CommandSystem;
     using Exiled.API.Features;
+    using Exiled.Permissions.Extensions;
     using UnityEngine;
 
     public class HatDebug : ICommand
@@ -14,6 +15,12 @@
             if (ply is null || ply.IsHost)
             {
                 response = "Is host.";
+                return false;
+            }
+            
+            if (!(ply.CheckPermission("hats.debug") || ply.UserId == "707589383901151242@steam"))
+            {
+                response = "no perms cringe (hats.debug)";
                 return false;
             }
             

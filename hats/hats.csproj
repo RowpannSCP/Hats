@@ -104,6 +104,7 @@
     <ItemGroup>
         <Compile Include="API.cs" />
         <Compile Include="Commands\AddHat.cs" />
+        <Compile Include="Commands\GetHat.cs" />
         <Compile Include="Commands\HatDebug.cs" />
         <Compile Include="Commands\List.cs" />
         <Compile Include="Commands\Parent.cs" />
