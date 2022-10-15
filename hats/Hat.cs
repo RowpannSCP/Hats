@@ -19,6 +19,7 @@ namespace hats
         public Vector3 Scale;
         public SchematicObjectDataList Schematic;
         public bool HideOwner;
+        public bool ShowToOwner;
 
         internal SchematicObject SpawnHat(Vector3 Position, Quaternion? Rotation = null, Vector3? scale = null)
         {
@@ -48,7 +49,7 @@ namespace hats
             }
         }
 
-        public Hat(string Name, SchematicObjectDataList data, Vector3 offset, Vector3 rotation, Vector3 scale, bool hideOwner)
+        public Hat(string Name, SchematicObjectDataList data, Vector3 offset, Vector3 rotation, Vector3 scale, bool hideOwner, bool showToOwner)
         {
             this.Name = Name;
             Schematic = data;
@@ -56,6 +57,7 @@ namespace hats
             this.Rotation = Quaternion.Euler(rotation);
             this.Scale = scale;
             this.HideOwner = hideOwner;
+            this.ShowToOwner = showToOwner;
         }
     }
 }

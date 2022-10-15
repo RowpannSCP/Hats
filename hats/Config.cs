@@ -8,7 +8,6 @@ namespace hats
     {
         public bool IsEnabled { get; set; } = true;
         public bool RemoveHatOnDeath { get; set; } = true;
-        public bool ShowHatToOwner { get; set; } = true;
         public string CommandPrefix { get; set; } = "hatplugin";
         
         public List<HatConfig> Hats { get; set; }= new List<HatConfig>()
@@ -36,6 +35,7 @@ namespace hats
                     z = 1
                 },
                 MakePlayerInvisible = false,
+                ShowHatToOwner = true,
                 UsersWithAccess = new List<string>(),
                 GroupsWithAccess = new List<string>()
             }

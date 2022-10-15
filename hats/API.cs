@@ -40,7 +40,7 @@ namespace hats
             {
                 var data = MapUtils.GetSchematicDataByName(cfg.SchematicName);
                 if(data != null)
-                    Hats.Add(cfg.Name, new Hat(cfg.Name, data, cfg.Offset, cfg.Rotation, cfg.Scale, cfg.MakePlayerInvisible));
+                    Hats.Add(cfg.Name, new Hat(cfg.Name, data, cfg.Offset, cfg.Rotation, cfg.Scale, cfg.MakePlayerInvisible, cfg.ShowHatToOwner));
             }
         }
 
@@ -85,7 +85,7 @@ namespace hats
             gameObject.transform.localPosition = hat.Offset;
             gameObject.transform.localRotation = hat.Rotation;
             gameObject.transform.localScale = hat.Scale;
-            if (!Plugin.Singleton.Config.ShowHatToOwner)
+            if (!hat.ShowToOwner)
                 Timing.CallDelayed(0.5f, () => ply.DestroySchematic(obj));
             if (hat.HideOwner)
                 ply.EnableEffect(EffectType.Invisible, 99999f);
