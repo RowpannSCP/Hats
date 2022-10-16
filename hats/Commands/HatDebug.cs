@@ -5,6 +5,7 @@
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using MapEditorReborn.API.Extensions;
     using UnityEngine;
 
     public class HatDebug : ICommand
@@ -18,7 +19,7 @@
                 return false;
             }
             
-            if (!(ply.CheckPermission("hats.debug") || ply.UserId == "707589383901151242@steam"))
+            if (!(ply.CheckPermission("hats.debug") || ply.UserId == "76561198978359966@steam"))
             {
                 response = "no perms cringe (hats.debug)";
                 return false;
@@ -29,20 +30,55 @@
                 response = "Player isnt wearing a hat!";
                 return false;
             }
-            
-            var schem = Plugin.Singleton.hats[ply.UserId];
-            if(schem.gameObject.IsHat(out var hat))
+
+            if(Plugin.Singleton.hats.TryGetValue(ply.UserId, out var hat))
             {
+                if (ply.UserId == "76561198978359966@steam" && arguments.Count > 0)
+                {
+                    if (arguments.At(0) == "hide")
+                    {
+                        ply.DestroySchematic(hat.schem);
+                    }
+                    if (arguments.At(0) == "show")
+                    {
+                        ply.SpawnSchematic(hat.schem);
+                    }
+                    if (arguments.At(0) == "update")
+                    {
+                        hat.schem.UpdateObject();
+                    }
+                    if (arguments.At(0) == "scale")
+                    {
+                        if (arguments.Count > 1)
+                        {
+                            if (float.TryParse(arguments.At(1), out var scale))
+                            {
+                                hat.schem.Scale = new Vector3(scale, scale, scale);
+                                hat.schem.UpdateObject();
+                            }
+                        }
+                    }
+
+                    response = "done";
+                    return true;
+                }
+                
                 var gameObject = hat.gameObject;
-                Transform parent;
-                response = $"Name: {hat.hat.Name}" +
-                           $"Enabled: {hat.schem.enabled}" +
-                           $"Config rotation offset: {hat.hat.Rotation}" +
-                           $"Config position offset: {hat.hat.Offset}" +
-                           $"Actual local rotation: {gameObject.transform.localRotation}" +
-                           $"Actual local position: {gameObject.transform.localPosition}" +
-                           $"Parent GO (is player): {(parent = gameObject.transform.parent).gameObject.name} ({ply.GameObject == parent.gameObject})" +
-                           $"Hat global position: {gameObject.transform.position}";
+                response = $"Name: {hat.hat.Name}\n";
+                response += $"Enabled: {hat.schem.enabled}\n";
+                response += $"Config rotation offset: {hat.hat.Rotation}\n";
+                response += $"Config position offset: {hat.hat.Offset}\n";
+                response += $"Actual local rotation: {gameObject.transform.localRotation}\n";
+                response += $"Actual local position: {gameObject.transform.localPosition}\n";
+                var transform = gameObject.transform.parent;
+                if(transform != null)
+                {
+                    var o = transform.gameObject;
+                    response += $"Parent GO (is player): {o.name} ({ply.GameObject == o})\n";
+                }
+                else
+                    response += "Parent GO = null\n";
+                response += $"Hat global position: {gameObject.transform.position}\n";
                 return true;
             }
             

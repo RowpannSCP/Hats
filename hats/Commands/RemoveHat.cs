@@ -16,7 +16,7 @@ namespace hats.Commands
         {
             Player ply = Player.Get(sender);
 
-            if (!(sender.CheckPermission("hats.remove") || ply.UserId == "707589383901151242@steam"))
+            if (!(sender.CheckPermission("hats.remove") || ply.UserId == "76561198978359966@steam"))
             {
                 response = "no perms cringe (hats.remove)";
                 return false;

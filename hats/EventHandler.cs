@@ -4,6 +4,8 @@ using MapEditorReborn.API.Features.Objects;
 
 namespace hats
 {
+    using Exiled.API.Enums;
+
     public class EventHandler
     {
         private Config cfg;
@@ -22,6 +24,8 @@ namespace hats
         public void Died(DiedEventArgs ev)
         {
             if(!cfg.RemoveHatOnDeath)
+                return;
+            if (ev.Handler.Type == DamageType.Unknown)
                 return;
             if(ev.Target.GameObject.TryGetComponent<HatComponent>(out _))
                 ev.Target.RemoveHat();

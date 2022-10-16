@@ -5,7 +5,6 @@ using hats.Components;
 using MapEditorReborn.API.Features;
 using MapEditorReborn.API.Features.Objects;
 using MapEditorReborn.API.Features.Serializable;
-using MapEditorReborn.Commands.Scale;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

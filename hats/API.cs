@@ -6,7 +6,6 @@ using hats.Components;
 using MapEditorReborn.API.Features;
 using MapEditorReborn.API.Features.Objects;
 using MapEditorReborn.API.Features.Serializable;
-using Newtonsoft.Json;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -81,12 +80,17 @@ namespace hats
             comp.ply = ply;
             comp.schem = obj;
             var gameObject = obj.gameObject;
-            gameObject.transform.SetParent(ply.GameObject.transform);
+            gameObject.transform.parent = ply.GameObject.transform;
             gameObject.transform.localPosition = hat.Offset;
             gameObject.transform.localRotation = hat.Rotation;
-            obj.Scale = hat.Scale;
+            gameObject.transform.localScale = hat.Scale;
             if (!hat.ShowToOwner)
-                Timing.CallDelayed(1f, () => ply.DestroySchematic(obj));
+            {
+                Timing.CallDelayed(1f, () =>
+                {
+                    ply.DestroySchematic(obj);
+                });
+            }
             if (hat.HideOwner)
                 ply.IsInvisible = true;
             Plugin.Singleton.hats.Add(ply.UserId, comp);
