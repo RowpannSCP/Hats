@@ -84,6 +84,7 @@ namespace hats
             gameObject.transform.SetParent(ply.GameObject.transform);
             gameObject.transform.localPosition = hat.Offset;
             gameObject.transform.localRotation = hat.Rotation;
+            obj.Scale = hat.Scale;
             if (!hat.ShowToOwner)
                 Timing.CallDelayed(1f, () => ply.DestroySchematic(obj));
             if (hat.HideOwner)
@@ -100,13 +101,8 @@ namespace hats
 
             try
             {
-                var schem = Plugin.Singleton.hats[ply.UserId];
-                if(schem.gameObject.IsHat(out var hat))
-                {
-                    if (hat.hat.HideOwner)
-                        ply.IsInvisible = false;
-                    hat.DoDestroy();
-                }
+                var hat = Plugin.Singleton.hats[ply.UserId];
+                hat.DoDestroy();
             }
             catch (Exception e)
             {

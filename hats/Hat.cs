@@ -23,7 +23,7 @@ namespace hats
 
         internal SchematicObject SpawnHat(Vector3 Position, Quaternion? Rotation = null, Vector3? scale = null)
         {
-            SchematicObject obj = ObjectSpawner.SpawnSchematic(Name, Position, Rotation, scale ?? Scale, Schematic);
+            SchematicObject obj = ObjectSpawner.SpawnSchematic(Name, Position, Rotation, scale, Schematic);
             return obj;
         }
 
