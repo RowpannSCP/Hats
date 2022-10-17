@@ -8,6 +8,7 @@ namespace hats
     {
         public bool IsEnabled { get; set; } = true;
         public bool RemoveHatOnDeath { get; set; } = true;
+        public bool ListCommandShowPath { get; set; } = false;
         public string CommandPrefix { get; set; } = "hatplugin";
         
         public List<HatConfig> Hats { get; set; }= new List<HatConfig>()

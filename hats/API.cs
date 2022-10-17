@@ -106,6 +106,8 @@ namespace hats
             try
             {
                 var hat = Plugin.Singleton.hats[ply.UserId];
+                if(hat.hat.HideOwner)
+                    ply.IsInvisible = false;
                 hat.DoDestroy();
             }
             catch (Exception e)

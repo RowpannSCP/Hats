@@ -23,9 +23,19 @@ namespace hats.Commands
             
             StringBuilder stringBuilder = StringBuilderPool.Shared.Rent();
             stringBuilder.AppendLine("Available hats:");
-            foreach (var kvp in API.Hats)
+            if(Plugin.Singleton.Config.ListCommandShowPath)
             {
-                stringBuilder.AppendLine($"{kvp.Key} - {kvp.Value.Schematic.Path}");
+                foreach (var kvp in API.Hats)
+                {
+                    stringBuilder.AppendLine($"{kvp.Key} - {kvp.Value.Schematic.Path}");
+                }
+            }
+            else
+            {
+                foreach (var kvp in API.Hats)
+                {
+                    stringBuilder.AppendLine($"{kvp.Key}");
+                }
             }
         
             response = StringBuilderPool.Shared.ToStringReturn(stringBuilder).TrimEnd();
