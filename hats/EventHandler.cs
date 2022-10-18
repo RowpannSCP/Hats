@@ -36,5 +36,18 @@ namespace hats
             if(ev.Player.GameObject.TryGetComponent<HatComponent>(out _))
                 ev.Player.RemoveHat();
         }
+        
+        public void UsedItem(UsedItemEventArgs ev)
+        {
+            if(!cfg.RemoveHatWhenUsing268)
+                return;
+            if (ev.Item.Type != ItemType.SCP268)
+                return;
+            if (ev.Player.GameObject.TryGetComponent<HatComponent>(out _))
+            {
+                ev.Player.RemoveHat();
+                ev.Player.ShowHint("Removed hat since you used 268.");
+            }
+        }
     }
 }

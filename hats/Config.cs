@@ -14,6 +14,7 @@
         public bool ShowHatToOwnerIfRoleHideHatAndHideHatToOwnerFalse { get; set; } = true;
         public bool AllowGetHatToRemoveHat { get; set; } = true;
         public bool TrimHatNamesInGetHat { get; set; } = true;
+        public bool RemoveHatWhenUsing268 { get; set; } = true;
         public string CommandPrefix { get; set; } = "hatplugin";
 
         public List<RoleType> RolesToHideHatFrom { get; set; } = new List<RoleType>()
