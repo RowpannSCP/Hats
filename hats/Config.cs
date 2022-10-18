@@ -1,16 +1,28 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Interfaces;
-using UnityEngine;
-
-namespace hats
+﻿namespace hats
 {
+    using System.ComponentModel;
+    using System.Collections.Generic;
+    using Exiled.API.Interfaces;
+    using UnityEngine;
+
     public class Config : IConfig
     {
         public bool IsEnabled { get; set; } = true;
         public bool RemoveHatOnDeath { get; set; } = true;
         public bool ListCommandShowPath { get; set; } = false;
+        [Description("Whether or not the hat owner will bypass role blacklist (hat-specific config used instead)")]
+        public bool ShowHatToOwnerIfRoleHideHatAndHideHatToOwnerFalse { get; set; } = true;
+        public bool AllowGetHatToRemoveHat { get; set; } = true;
+        public bool TrimHatNamesInGetHat { get; set; } = true;
         public string CommandPrefix { get; set; } = "hatplugin";
-        
+
+        public List<RoleType> RolesToHideHatFrom { get; set; } = new List<RoleType>()
+        {
+            RoleType.Scp93953,
+            RoleType.Scp93989,
+            RoleType.Scp096
+        };
+
         public List<HatConfig> Hats { get; set; }= new List<HatConfig>()
         {
             new HatConfig()

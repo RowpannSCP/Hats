@@ -1,6 +1,7 @@
 ﻿namespace hats.Commands
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using CommandSystem;
     using Exiled.API.Extensions;
@@ -15,8 +16,14 @@
             var ply = Player.Get(sender);
             if (Plugin.Singleton.hats.ContainsKey(ply.UserId))
             {
-                response = "You are already wearing a hat!";
-                return false;
+                if (!Plugin.Singleton.Config.AllowGetHatToRemoveHat)
+                {
+                    response = "Already wearing a hat (removing hat disabled in config)";
+                    return false;
+                }
+                ply.RemoveHat();
+                response = "Removed hat!";
+                return true;
             }
             
             var hats = Plugin.Singleton.Config.Hats
@@ -47,13 +54,28 @@
                 return false;
             }
 
-            if (!hats.Select(x => x.Name).Contains(arguments.At(0)))
+            KeyValuePair<string, Hat> toSpawnHat = new KeyValuePair<string, Hat>();
+            // Idk why but somehow spaces get added
+            if (Plugin.Singleton.Config.TrimHatNamesInGetHat)
             {
-                response = $"You don't have access to {arguments.At(0)}";
-                return false;
+                if (hats.Select(x => x.Name).All(x => x.TrimStart().TrimEnd() != arguments.At(0).TrimStart().TrimEnd()))
+                {
+                    response = $"You don't have access to {arguments.At(0).TrimStart().TrimEnd()}";
+                    return false;
+                }
+                
+                toSpawnHat = API.Hats.First(x => x.Key.TrimStart().TrimEnd() == arguments.At(0).TrimStart().TrimEnd());
             }
-            
-            var toSpawnHat = API.Hats.First(x => x.Key == arguments.At(0));
+            else
+            {
+                if (!hats.Select(x => x.Name).Contains(arguments.At(0)))
+                {
+                    response = $"You don't have access to {arguments.At(0)}";
+                    return false;
+                }
+                
+                toSpawnHat = API.Hats.First(x => x.Key == arguments.At(0));
+            }
 
             try
             {

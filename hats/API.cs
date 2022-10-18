@@ -4,15 +4,10 @@ using System.Linq;
 using Exiled.API.Features;
 using hats.Components;
 using MapEditorReborn.API.Features;
-using MapEditorReborn.API.Features.Objects;
-using MapEditorReborn.API.Features.Serializable;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace hats
 {
-    using System.Diagnostics;
-    using Exiled.API.Enums;
     using MapEditorReborn.API.Extensions;
     using MEC;
 
@@ -84,13 +79,26 @@ namespace hats
             gameObject.transform.localPosition = hat.Offset;
             gameObject.transform.localRotation = hat.Rotation;
             gameObject.transform.localScale = hat.Scale;
-            if (!hat.ShowToOwner)
+            if (!hat.ShowToOwner && (!Plugin.Singleton.Config.RolesToHideHatFrom.Contains(ply.Role.Type) || Plugin.Singleton.Config.ShowHatToOwnerIfRoleHideHatAndHideHatToOwnerFalse))
             {
                 Timing.CallDelayed(1f, () =>
                 {
                     ply.DestroySchematic(obj);
                 });
             }
+
+            Timing.CallDelayed(1f, () =>
+            {
+                foreach (var player in Player.List)
+                {
+                    if (!Plugin.Singleton.Config.RolesToHideHatFrom.Contains(player.Role.Type))
+                        return;
+                    if (player == ply)
+                        return;
+                    player.DestroySchematic(obj);
+                }
+            });
+            
             if (hat.HideOwner)
                 ply.IsInvisible = true;
             Plugin.Singleton.hats.Add(ply.UserId, comp);
