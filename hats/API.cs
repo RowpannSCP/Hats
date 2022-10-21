@@ -92,9 +92,9 @@ namespace hats
                 foreach (var player in Player.List)
                 {
                     if (!Plugin.Singleton.Config.RolesToHideHatFrom.Contains(player.Role.Type))
-                        return;
+                        continue;
                     if (player == ply)
-                        return;
+                        continue;
                     player.DestroySchematic(obj);
                 }
             });
