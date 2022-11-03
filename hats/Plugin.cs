@@ -11,7 +11,7 @@ namespace hats
     {
         public override string Author { get; } = "Rowpann SCP";
         public override string Name { get; } = "hats";
-        public override Version Version { get; } = new Version(1, 4, 3);
+        public override Version Version { get; } = new Version(1, 5, 0);
         public override Version RequiredExiledVersion { get; } = new Version(5, 2, 0);
 
         public static Plugin Singleton;
@@ -28,6 +28,7 @@ namespace hats
             Player.Left += Handler.OnLeave;
             Player.Died += Handler.Died;
             Player.UsedItem += Handler.UsedItem;
+            Player.Spawned += Handler.Spawned;
             
             base.OnEnabled();
         }
@@ -38,6 +39,7 @@ namespace hats
             Player.Left -= Handler.OnLeave;
             Player.Died -= Handler.Died;
             Player.UsedItem -= Handler.UsedItem;
+            Player.Spawned -= Handler.Spawned;
 
             Singleton = null;
             Handler = null;

@@ -24,6 +24,13 @@
             RoleType.Scp096
         };
 
+        public bool EnableAutoGiveHat { get; set; } = false;
+        [Description("Roles that will be given a hat on spawn, if EnableAutoGiveHat is true")]
+        public Dictionary<RoleType, string> RolesWithHats { get; set; } = new Dictionary<RoleType, string>()
+        {
+            [RoleType.ClassD] = "Name",
+        };
+
         public List<HatConfig> Hats { get; set; }= new List<HatConfig>()
         {
             new HatConfig()

@@ -5,6 +5,7 @@ using MapEditorReborn.API.Features.Objects;
 namespace hats
 {
     using Exiled.API.Enums;
+    using Exiled.API.Features;
 
     public class EventHandler
     {
@@ -48,6 +49,20 @@ namespace hats
                 ev.Player.RemoveHat();
                 ev.Player.ShowHint("Removed hat since you used 268.");
             }
+        }
+
+        public void Spawned(SpawnedEventArgs ev)
+        {
+            if (!cfg.EnableAutoGiveHat)
+                return;
+            if (!cfg.RolesWithHats.ContainsKey(ev.Player.Role.Type))
+                return;
+            if(!API.Hats.ContainsKey(cfg.RolesWithHats[ev.Player.Role.Type]))
+            {
+                Log.Warn($"Could not find hat: {cfg.RolesWithHats[ev.Player.Role.Type]} for role: {ev.Player.Role.Type}");
+                return;
+            }
+            ev.Player.AddHat(API.Hats[cfg.RolesWithHats[ev.Player.Role.Type]]);
         }
     }
 }
