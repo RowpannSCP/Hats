@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace hats
 {
+    using CustomPlayerEffects;
     using MapEditorReborn.API.Extensions;
     using MEC;
 
@@ -100,7 +101,7 @@ namespace hats
             });
             
             if (hat.HideOwner)
-                ply.IsInvisible = true;
+                ply.EnableEffect<Invisible>();
             Plugin.Singleton.hats.Add(ply.UserId, comp);
         }
 
@@ -115,7 +116,7 @@ namespace hats
             {
                 var hat = Plugin.Singleton.hats[ply.UserId];
                 if(hat.hat.HideOwner)
-                    ply.IsInvisible = false;
+                    ply.DisableEffect<Invisible>();
                 hat.DoDestroy();
             }
             catch (Exception e)

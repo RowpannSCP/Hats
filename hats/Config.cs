@@ -3,11 +3,13 @@
     using System.ComponentModel;
     using System.Collections.Generic;
     using Exiled.API.Interfaces;
+    using PlayerRoles;
     using UnityEngine;
 
     public class Config : IConfig
     {
         public bool IsEnabled { get; set; } = true;
+        public bool Debug { get; set; }
         public bool RemoveHatOnDeath { get; set; } = true;
         public bool ListCommandShowPath { get; set; } = false;
         [Description("Whether or not the hat owner will bypass role blacklist (hat-specific config used instead)")]
@@ -17,18 +19,17 @@
         public bool RemoveHatWhenUsing268 { get; set; } = true;
         public string CommandPrefix { get; set; } = "hatplugin";
 
-        public List<RoleType> RolesToHideHatFrom { get; set; } = new List<RoleType>()
+        public List<RoleTypeId> RolesToHideHatFrom { get; set; } = new List<RoleTypeId>()
         {
-            RoleType.Scp93953,
-            RoleType.Scp93989,
-            RoleType.Scp096
+            RoleTypeId.Scp939,
+            RoleTypeId.Scp096
         };
 
         public bool EnableAutoGiveHat { get; set; } = false;
         [Description("Roles that will be given a hat on spawn, if EnableAutoGiveHat is true")]
-        public Dictionary<RoleType, string> RolesWithHats { get; set; } = new Dictionary<RoleType, string>()
+        public Dictionary<RoleTypeId, string> RolesWithHats { get; set; } = new Dictionary<RoleTypeId, string>()
         {
-            [RoleType.ClassD] = "Name",
+            [RoleTypeId.ClassD] = "Name",
         };
 
         public List<HatConfig> Hats { get; set; }= new List<HatConfig>()

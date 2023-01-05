@@ -9,7 +9,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>hats</RootNamespace>
         <AssemblyName>hats</AssemblyName>
-        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>9</LangVersion>
     </PropertyGroup>
@@ -76,7 +76,7 @@
       <None Include="App.config" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="EXILED" Version="5.3.1" />
+      <PackageReference Include="EXILED" Version="6.0.0-beta.18" />
       <PackageReference Include="System.ComponentModel.Primitives" Version="4.3.0" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

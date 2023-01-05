@@ -6,6 +6,7 @@ namespace hats
 {
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using Exiled.Events.EventArgs.Player;
 
     public class EventHandler
     {
@@ -26,10 +27,10 @@ namespace hats
         {
             if(!cfg.RemoveHatOnDeath)
                 return;
-            if (ev.Handler.Type == DamageType.Unknown)
+            if (ev.DamageHandler.Type == DamageType.Unknown)
                 return;
-            if(ev.Target.GameObject.TryGetComponent<HatComponent>(out _))
-                ev.Target.RemoveHat();
+            if(ev.Player.GameObject.TryGetComponent<HatComponent>(out _))
+                ev.Player.RemoveHat();
         }
         
         public void OnLeave(LeftEventArgs ev)
