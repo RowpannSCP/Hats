@@ -11,7 +11,7 @@ namespace hats
     {
         public override string Author { get; } = "Rowpann SCP";
         public override string Name { get; } = "hats";
-        public override Version Version { get; } = new Version(1, 5, 0);
+        public override Version Version { get; } = new Version(1, 5, 1);
         public override Version RequiredExiledVersion { get; } = new Version(6, 0, 0);
 
         public static Plugin Singleton;
