@@ -9,6 +9,7 @@ using UnityEngine;
 namespace hats
 {
     using CustomPlayerEffects;
+    using Exiled.API.Features.Roles;
     using MapEditorReborn.API.Extensions;
     using MEC;
 
@@ -100,8 +101,10 @@ namespace hats
                 }
             });
             
-            if (hat.HideOwner)
-                ply.EnableEffect<Invisible>();
+            if (hat.HideOwner && ply.Role is FpcRole fpcRole)
+            {
+                fpcRole.IsInvisible = true;
+            }
             Plugin.Singleton.hats.Add(ply.UserId, comp);
         }
 
@@ -115,8 +118,8 @@ namespace hats
             try
             {
                 var hat = Plugin.Singleton.hats[ply.UserId];
-                if(hat.hat.HideOwner)
-                    ply.DisableEffect<Invisible>();
+                if(hat.hat.HideOwner && ply.Role is FpcRole fpcRole)
+                    fpcRole.IsInvisible = false;
                 hat.DoDestroy();
             }
             catch (Exception e)
