@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace hats
 {
-    using CustomPlayerEffects;
     using Exiled.API.Features.Roles;
     using MapEditorReborn.API.Extensions;
     using MEC;
@@ -71,7 +70,7 @@ namespace hats
                 throw new ArgumentNullException(nameof(hat));
             if (ply.GameObject.TryGetComponent<HatComponent>(out _))
                 return;
-            var obj = hat.SpawnHat(ply.Position);
+            var obj = hat.SpawnHat(ply.Position, null, hat.Scale);
             var comp = ply.GameObject.AddComponent<HatComponent>();
             comp.hat = hat;
             comp.ply = ply;
@@ -80,7 +79,6 @@ namespace hats
             gameObject.transform.parent = ply.GameObject.transform;
             gameObject.transform.localPosition = hat.Offset;
             gameObject.transform.localRotation = hat.Rotation;
-            gameObject.transform.localScale = hat.Scale;
             if (!hat.ShowToOwner && (!Plugin.Singleton.Config.RolesToHideHatFrom.Contains(ply.Role.Type) || Plugin.Singleton.Config.ShowHatToOwnerIfRoleHideHatAndHideHatToOwnerFalse))
             {
                 Timing.CallDelayed(1f, () =>

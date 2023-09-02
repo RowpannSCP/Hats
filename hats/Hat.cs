@@ -20,9 +20,9 @@ namespace hats
         public bool HideOwner;
         public bool ShowToOwner;
 
-        internal SchematicObject SpawnHat(Vector3 Position, Quaternion? Rotation = null, Vector3? scale = null)
+        internal SchematicObject SpawnHat(Vector3 position, Quaternion? rotation = null, Vector3? scale = null)
         {
-            SchematicObject obj = ObjectSpawner.SpawnSchematic(Name, Position, Rotation, scale, Schematic);
+            SchematicObject obj = ObjectSpawner.SpawnSchematic(Name, position, rotation, scale, Schematic);
             return obj;
         }
 

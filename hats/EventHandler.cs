@@ -1,12 +1,10 @@
-﻿using Exiled.Events.EventArgs;
-using hats.Components;
-using MapEditorReborn.API.Features.Objects;
+﻿using hats.Components;
 
 namespace hats
 {
-    using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs.Player;
+    using PlayerRoles;
 
     public class EventHandler
     {
@@ -27,7 +25,7 @@ namespace hats
         {
             if(!cfg.RemoveHatOnDeath)
                 return;
-            if (ev.DamageHandler.Type == DamageType.Unknown)
+            if (ev.Player == null || ev.Player.Role.Type == RoleTypeId.None || !ev.Player.IsConnected || ev.Player.GameObject == null)
                 return;
             if(ev.Player.GameObject.TryGetComponent<HatComponent>(out _))
                 ev.Player.RemoveHat();
