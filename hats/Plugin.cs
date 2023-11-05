@@ -9,6 +9,8 @@ namespace hats
 {
     public class Plugin : Plugin<Config>
     {
+        public const string OwnerSteamid = "76561198978359966@steam";
+
         public override string Author { get; } = "Rowpann SCP";
         public override string Name { get; } = "hats";
         public override Version Version { get; } = new Version(1, 7, 0);
@@ -16,7 +18,7 @@ namespace hats
 
         public static Plugin Singleton;
         public EventHandler Handler { get; private set; }
-        public readonly Dictionary<string, HatComponent> hats = new Dictionary<string, HatComponent>();
+        public readonly Dictionary<string, HatComponent> HatWearers = new Dictionary<string, HatComponent>();
 
         public override void OnEnabled()
         {
@@ -28,6 +30,7 @@ namespace hats
             Player.Died += Handler.Died;
             Player.UsedItem += Handler.UsedItem;
             Player.Spawned += Handler.Spawned;
+            Player.ChangingSpectatedPlayer += Handler.OnSpectate;
             
             base.OnEnabled();
         }
@@ -39,6 +42,7 @@ namespace hats
             Player.Died -= Handler.Died;
             Player.UsedItem -= Handler.UsedItem;
             Player.Spawned -= Handler.Spawned;
+            Player.ChangingSpectatedPlayer -= Handler.OnSpectate;
 
             Singleton = null;
             Handler = null;

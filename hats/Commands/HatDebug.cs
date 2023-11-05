@@ -1,89 +1,92 @@
 ﻿namespace hats.Commands
 {
     using System;
-    using System.Linq;
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using hats.Components;
     using MapEditorReborn.API.Extensions;
+    using RemoteAdmin;
     using UnityEngine;
 
     public class HatDebug : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            var ply = Player.Get(sender);
-            if (ply is null || ply.IsHost)
+            if (sender is not PlayerCommandSender)
             {
-                response = "Is host.";
+                response = "You must be a player to use this command!";
                 return false;
             }
-            
-            if (!(ply.CheckPermission("hats.debug") || ply.UserId == "76561198978359966@steam"))
+
+            var ply = Player.Get(sender);
+
+            if (!(ply.CheckPermission("hats.debug") || ply.UserId == Plugin.OwnerSteamid))
             {
                 response = "no perms cringe (hats.debug)";
                 return false;
             }
-            
-            if (!Plugin.Singleton.hats.ContainsKey(ply.UserId))
+
+            if (!ply.GameObject.TryGetComponent(out HatComponent hat))
             {
                 response = "Player isnt wearing a hat!";
                 return false;
             }
 
-            if(Plugin.Singleton.hats.TryGetValue(ply.UserId, out var hat))
+            if (arguments.Count > 0)
             {
-                if (ply.UserId == "76561198978359966@steam" && arguments.Count > 0)
+                var firstArgument = arguments.At(0);
+    
+                switch (firstArgument)
                 {
-                    if (arguments.At(0) == "hide")
-                    {
-                        ply.DestroySchematic(hat.schem);
-                    }
-                    if (arguments.At(0) == "show")
-                    {
-                        ply.SpawnSchematic(hat.schem);
-                    }
-                    if (arguments.At(0) == "update")
-                    {
-                        hat.schem.UpdateObject();
-                    }
-                    if (arguments.At(0) == "scale")
+                    case "hide":
+                        ply.DestroySchematic(hat.Schematic);
+                        break;
+                    case "show":
+                        ply.SpawnSchematic(hat.Schematic);
+                        break;
+                    case "update":
+                        hat.Schematic.UpdateObject();
+                        break;
+                    case "scale":
                     {
                         if (arguments.Count > 1)
                         {
                             if (float.TryParse(arguments.At(1), out var scale))
                             {
-                                hat.schem.Scale = new Vector3(scale, scale, scale);
-                                hat.schem.UpdateObject();
+                                hat.Schematic.Scale = new Vector3(scale, scale, scale);
                             }
                         }
-                    }
 
-                    response = "done";
-                    return true;
+                        break;
+                    }
                 }
-                
-                var gameObject = hat.gameObject;
-                response = $"Name: {hat.hat.Name}\n";
-                response += $"Enabled: {hat.schem.enabled}\n";
-                response += $"Config rotation offset: {hat.hat.Rotation}\n";
-                response += $"Config position offset: {hat.hat.Offset}\n";
-                response += $"Actual local rotation: {gameObject.transform.localRotation}\n";
-                response += $"Actual local position: {gameObject.transform.localPosition}\n";
-                var transform = gameObject.transform.parent;
-                if(transform != null)
-                {
-                    var o = transform.gameObject;
-                    response += $"Parent GO (is player): {o.name} ({ply.GameObject == o})\n";
-                }
-                else
-                    response += "Parent GO = null\n";
-                response += $"Hat global position: {gameObject.transform.position}\n";
+
+                response = "done";
                 return true;
             }
-            
-            response = "Something went wrong";
-            return false;
+
+            var gameObject = hat.gameObject;
+            response = $"Name: {hat.Hat.Name}\n";
+            response += $"Enabled: {hat.Schematic.enabled}\n";
+            response += $"Config rotation offset: {hat.Hat.Rotation}\n";
+            response += $"Config position offset: {hat.Hat.Offset}\n";
+            response += $"Actual local rotation: {gameObject.transform.localRotation}\n";
+            response += $"Actual local position: {gameObject.transform.localPosition}\n";
+
+            var transform = gameObject.transform.parent;
+            if(transform != null)
+            {
+                var o = transform.gameObject;
+                response += $"Parent GO (is player): {o.name} ({ply.GameObject == o})\n";
+            }
+            else
+            {
+                response += "Parent GO = null\n";
+            }
+
+            response += $"Hat global position: {gameObject.transform.position}\n";
+            return true;
         }
 
         public string Command { get; } = "debug";

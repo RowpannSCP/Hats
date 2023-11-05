@@ -2,8 +2,10 @@
 
 namespace hats
 {
+    using System;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs.Player;
+    using MapEditorReborn.API.Extensions;
     using PlayerRoles;
 
     public class EventHandler
@@ -23,45 +25,75 @@ namespace hats
 
         public void Died(DiedEventArgs ev)
         {
-            if(!cfg.RemoveHatOnDeath)
+            if (!cfg.RemoveHatOnDeath)
                 return;
-            if (ev.Player == null || ev.Player.Role.Type == RoleTypeId.None || !ev.Player.IsConnected || ev.Player.GameObject == null)
-                return;
-            if(ev.Player.GameObject.TryGetComponent<HatComponent>(out _))
+            if (ev.Player.GameObject.TryGetComponent<HatComponent>(out _))
                 ev.Player.RemoveHat();
         }
-        
+
         public void OnLeave(LeftEventArgs ev)
         {
-            if(ev.Player.GameObject.TryGetComponent<HatComponent>(out _))
+            if (ev.Player.GameObject.TryGetComponent<HatComponent>(out _))
                 ev.Player.RemoveHat();
         }
-        
+
         public void UsedItem(UsedItemEventArgs ev)
         {
-            if(!cfg.RemoveHatWhenUsing268)
+            if (!cfg.RemoveHatWhenUsing268)
                 return;
             if (ev.Item.Type != ItemType.SCP268)
                 return;
-            if (ev.Player.GameObject.TryGetComponent<HatComponent>(out _))
+            try
             {
                 ev.Player.RemoveHat();
                 ev.Player.ShowHint("Removed hat since you used 268.");
             }
+            catch (ArgumentException) {}
         }
 
         public void Spawned(SpawnedEventArgs ev)
         {
             if (!cfg.EnableAutoGiveHat)
                 return;
-            if (!cfg.RolesWithHats.ContainsKey(ev.Player.Role.Type))
+            if (!cfg.RolesWithHats.TryGetValue(ev.Player.Role.Type, out var hatName))
                 return;
-            if(!API.Hats.ContainsKey(cfg.RolesWithHats[ev.Player.Role.Type]))
+
+            if (!API.Hats.TryGetValue(hatName, out var hat))
             {
-                Log.Warn($"Could not find hat: {cfg.RolesWithHats[ev.Player.Role.Type]} for role: {ev.Player.Role.Type}");
+                Log.Warn($"Could not find hat: {hatName} for role: {ev.Player.Role.Type}");
                 return;
             }
-            ev.Player.AddHat(API.Hats[cfg.RolesWithHats[ev.Player.Role.Type]]);
+ 
+            ev.Player.AddHat(hat);
+        }
+
+        public void OnSpectate(ChangingSpectatedPlayerEventArgs ev)
+        {
+            if (ev.OldTarget != null && ev.OldTarget.GameObject.TryGetComponent(out HatComponent hat))
+            {
+                if (hat.Hat.ShowHatToOtherSpectators)
+                {
+                    ev.Player.SpawnSchematic(hat.Schematic);
+                }
+                else
+                {
+                    if (!hat.Hat.ShowHatToOwnerSpectators)
+                        ev.Player.DestroySchematic(hat.Schematic);
+                }
+            }
+
+            if (ev.NewTarget != null && ev.NewTarget.GameObject.TryGetComponent(out hat))
+            {
+                if (hat.Hat.ShowHatToOwnerSpectators)
+                {
+                    ev.Player.SpawnSchematic(hat.Schematic);
+                }
+                else
+                {
+                    if (!hat.Hat.ShowHatToOtherSpectators)
+                        ev.Player.DestroySchematic(hat.Schematic);
+                }
+            }
         }
     }
 }

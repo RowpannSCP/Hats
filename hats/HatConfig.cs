@@ -13,6 +13,8 @@ namespace hats
         public Vector3 Scale { get; set; }
         public bool MakePlayerInvisible { get; set; } = false;
         public bool ShowHatToOwner { get; set; } = true;
+        public bool ShowHatToOwnerSpectators { get; set; } = false;
+        public bool ShowHatToOtherSpectators { get; set; } = true;
         public List<string> UsersWithAccess { get; set; } = new List<string>();
         public List<string> GroupsWithAccess { get; set; } = new List<string>();
     }

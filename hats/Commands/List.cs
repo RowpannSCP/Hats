@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using CommandSystem;
 using NorthwoodLib.Pools;
 
@@ -20,25 +19,26 @@ namespace hats.Commands
                 response = "no perms cringe (hats.list)";
                 return false;
             }
-            
-            StringBuilder stringBuilder = StringBuilderPool.Shared.Rent();
-            stringBuilder.AppendLine("Available hats:");
-            if(Plugin.Singleton.Config.ListCommandShowPath)
+
+            var sb = StringBuilderPool.Shared.Rent();
+            sb.AppendLine("Available hats:");
+
+            if (Plugin.Singleton.Config.ListCommandShowPath)
             {
                 foreach (var kvp in API.Hats)
                 {
-                    stringBuilder.AppendLine($"{kvp.Key} - {kvp.Value.Schematic.Path}");
+                    sb.AppendLine($"{kvp.Key} - {kvp.Value.Schematic.Path}");
                 }
             }
             else
             {
-                foreach (var kvp in API.Hats)
+                foreach (var name in API.Hats.Keys)
                 {
-                    stringBuilder.AppendLine($"{kvp.Key}");
+                    sb.AppendLine(name);
                 }
             }
-        
-            response = StringBuilderPool.Shared.ToStringReturn(stringBuilder).TrimEnd();
+
+            response = StringBuilderPool.Shared.ToStringReturn(sb).TrimEnd();
             return true;
         }
     }

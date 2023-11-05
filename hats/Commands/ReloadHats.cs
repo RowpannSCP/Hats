@@ -9,12 +9,12 @@
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if(!sender.CheckPermission("hats.reload"))
+            if (!sender.CheckPermission("hats.reload"))
             {
                 response = "Missing permission: hats.reload.";
                 return false;
             }
-            
+
             API.LoadHats();
             response = "reloaded hats!";
             return true;

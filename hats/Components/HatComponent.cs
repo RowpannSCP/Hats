@@ -7,20 +7,18 @@ namespace hats.Components
 {
     public class HatComponent : MonoBehaviour
     {
-        public Hat hat;
-        public Player ply;
-        public SchematicObject schem;
+        public Hat Hat;
+        public SchematicObject Schematic;
 
         public void DoDestroy()
         {
-            ply = null;
-            hat = null;
-            schem.Destroy();
+            Schematic.Destroy();
+
             try
             {
                 Destroy(this);
             }
-            catch(Exception e)
+            catch (Exception)
             {
                 // ignore
             }

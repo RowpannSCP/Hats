@@ -58,6 +58,8 @@
                 },
                 MakePlayerInvisible = false,
                 ShowHatToOwner = true,
+                ShowHatToOwnerSpectators = false,
+                ShowHatToOtherSpectators = true,
                 UsersWithAccess = new List<string>(),
                 GroupsWithAccess = new List<string>()
             }

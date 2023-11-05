@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Linq;
 using CommandSystem;
 using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
 
 namespace hats.Commands
 {
+    using hats.Components;
+    using RemoteAdmin;
+
     public class AddHat : ICommand
     {
         public string Command { get; } = "AddHat";
@@ -14,9 +16,15 @@ namespace hats.Commands
     
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player ply = Player.Get(sender);
+            if (sender is not PlayerCommandSender)
+            {
+                response = "You must be a player to use this command!";
+                return false;
+            }
 
-            if (!(sender.CheckPermission("hats.add") || ply.UserId == "76561198978359966@steam"))
+            var ply = Player.Get(sender);
+
+            if (!(sender.CheckPermission("hats.add") || ply.UserId == Plugin.OwnerSteamid))
             {
                 response = "no perms cringe (hats.add)";
                 return false;
@@ -28,30 +36,31 @@ namespace hats.Commands
                 return false;
             }
 
-            if (!API.Hats.ContainsKey(arguments.At(0)))
+            var firstArgument = arguments.At(0);
+            if (!API.Hats.ContainsKey(firstArgument))
             {
-                response = $"Unable to find hat: {arguments.At(0)}!";
+                response = $"Unable to find hat: {firstArgument}!";
                 return false;
             }
 
+            var secondArgument = arguments.At(1);
             if (arguments.Count == 2)
             {
-                ply = Player.Get(arguments.At(1));
-                if (ply == null)
+                if (!Player.TryGet(secondArgument, out ply))
                 {
-                    response = $"Unable to find player: {arguments.At(1)}";
+                    response = $"Unable to find player: {secondArgument}";
                     return false;
                 }
             }
 
-            if (Plugin.Singleton.hats.ContainsKey(ply.UserId))
+            if (ply.GameObject.TryGetComponent(out HatComponent _))
             {
                 response = "Player is already wearing a hat!";
                 return false;
             }
-        
-            ply.AddHat(API.Hats[arguments.At(0)]);
-        
+
+            ply.AddHat(API.Hats[firstArgument]);
+
             response = $"Gave hat to {ply.Nickname}!";
             return true;
         }

@@ -13,7 +13,7 @@ namespace hats.Commands
         public override string[] Aliases { get; } = { };
         public override string Description { get; } = "Parent command for hats plugin";
         public Parent() => LoadGeneratedCommands();
-        
+
         public sealed override void LoadGeneratedCommands()
         {
             RegisterCommand(new List());
@@ -25,7 +25,7 @@ namespace hats.Commands
 
         protected override bool ExecuteParent(ArraySegment<string> args, ICommandSender sender, out string response)
         {
-            StringBuilder stringBuilder = StringBuilderPool.Shared.Rent();
+            var stringBuilder = StringBuilderPool.Shared.Rent();
             stringBuilder.AppendLine("Please enter a valid subcommand! Available:");
             foreach (ICommand command in AllCommands)
             {

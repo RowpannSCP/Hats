@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using CommandSystem;
 using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
@@ -14,32 +13,34 @@ namespace hats.Commands
     
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player ply = Player.Get(sender);
+            var ply = Player.Get(sender);
 
-            if (!(sender.CheckPermission("hats.remove") || ply.UserId == "76561198978359966@steam"))
+            if (!(sender.CheckPermission("hats.remove") || ply.UserId == Plugin.OwnerSteamid))
             {
                 response = "no perms cringe (hats.remove)";
                 return false;
             }
 
-            if(arguments.Count > 0)
+            if (arguments.Count > 0)
             {
-                ply = Player.Get(arguments.At(0));
-                if (ply == null)
+                var plyArgument = arguments.At(0);
+                if (!Player.TryGet(plyArgument, out ply))
                 {
-                    response = $"Unable to find player: {arguments.At(0)}";
+                    response = $"Unable to find player: {plyArgument}";
                     return false;
                 }
             }
 
-            if (Plugin.Singleton.hats.Keys.All(x => x != ply.UserId))
+            try
             {
-                response = "Player isn't wearing a hat!";
+                ply.RemoveHat();
+            }
+            catch (ArgumentException)
+            {
+                response = "Player is not wearing a hat!";
                 return false;
             }
-        
-            ply.RemoveHat();
-        
+
             response = $"Removed hat from {ply.Nickname}!";
             return true;
         }

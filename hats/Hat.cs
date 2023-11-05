@@ -1,62 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using hats.Components;
 using MapEditorReborn.API.Features;
 using MapEditorReborn.API.Features.Objects;
 using MapEditorReborn.API.Features.Serializable;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace hats
 {
     public class Hat
     {
-        public string Name;
-        public Vector3 Offset;
-        public Quaternion Rotation;
-        public Vector3 Scale;
-        public SchematicObjectDataList Schematic;
-        public bool HideOwner;
-        public bool ShowToOwner;
+        public virtual string Name => Config.Name;
+        public virtual Vector3 Offset => Config.Offset;
+        public virtual Vector3 Rotation => Config.Rotation;
+        public virtual Vector3 Scale => Config.Scale;
+        public virtual bool MakePlayerInvisible => Config.MakePlayerInvisible;
+        public virtual bool ShowHatToOwner => Config.ShowHatToOwner;
+        public virtual bool ShowHatToOwnerSpectators => Config.ShowHatToOwnerSpectators;
+        public virtual bool ShowHatToOtherSpectators => Config.ShowHatToOtherSpectators;
 
-        internal SchematicObject SpawnHat(Vector3 position, Quaternion? rotation = null, Vector3? scale = null)
+        public virtual SchematicObjectDataList Schematic { get; }
+        public virtual HatConfig Config { get; }
+
+        public virtual SchematicObject SpawnHat(Vector3 position, Quaternion? rotation = null, Vector3? scale = null)
         {
-            SchematicObject obj = ObjectSpawner.SpawnSchematic(Name, position, rotation, scale, Schematic);
-            return obj;
+            return ObjectSpawner.SpawnSchematic(Name, position, rotation, scale, Schematic);
         }
 
-        public void DestroyInstances()
+        public virtual void DestroyInstances()
         {
-            if (Plugin.Singleton.hats.All(x => x.Value.hat != this))
-                return;
-            List<KeyValuePair<string, HatComponent>> toRemove = new List<KeyValuePair<string, HatComponent>>();
-            foreach (var kvp in Plugin.Singleton.hats.Where(x => x.Value.hat == this))
+            var toRemove = new List<string>();
+
+            foreach (var kvp in Plugin.Singleton.HatWearers
+                         .Where(x => x.Value.Hat == this))
             {
-                if (kvp.Value is null  || kvp.Value.schem.gameObject == null || !kvp.Value.schem.isActiveAndEnabled)
+                if (kvp.Value is null  || kvp.Value.Schematic.gameObject == null || !kvp.Value.Schematic.isActiveAndEnabled)
                 {
-                    toRemove.Add(kvp);
+                    toRemove.Add(kvp.Key);
                     continue;
                 }
+
                 kvp.Value.DoDestroy();
-                toRemove.Add(kvp);
+                toRemove.Add(kvp.Key);
             }
 
-            foreach (var kvp in toRemove)
+            foreach (var key in toRemove)
             {
-                Plugin.Singleton.hats.Remove(kvp.Key);
+                Plugin.Singleton.HatWearers.Remove(key);
             }
         }
 
-        public Hat(string Name, SchematicObjectDataList data, Vector3 offset, Vector3 rotation, Vector3 scale, bool hideOwner, bool showToOwner)
+        public Hat(HatConfig config, SchematicObjectDataList data)
         {
-            this.Name = Name;
+            Config = config;
             Schematic = data;
-            this.Offset = offset;
-            this.Rotation = Quaternion.Euler(rotation);
-            this.Scale = scale;
-            this.HideOwner = hideOwner;
-            this.ShowToOwner = showToOwner;
         }
     }
 }
